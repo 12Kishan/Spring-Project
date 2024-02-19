@@ -1,8 +1,10 @@
 package org.example.server.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Book {
@@ -13,6 +15,18 @@ public class Book {
     private String BookName;
     private String BookAuthor;
     private int TotalBooks;
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<Student> studentSet=new HashSet<>();
+
+    public Set<Student> getStudentSet() {
+        return studentSet;
+    }
+
+    public void setStudentSet(Set<Student> studentSet) {
+        this.studentSet = studentSet;
+    }
+
 
     public int getBookId() {
         return BookId;

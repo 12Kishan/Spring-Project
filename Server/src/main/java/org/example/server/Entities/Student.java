@@ -1,20 +1,22 @@
 package org.example.server.Entities;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Student {
     @Id
+@GeneratedValue
     int StudentId;
     String StudentName;
     boolean IsLibraryMember = false;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Book> book;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "student_book")
+    private Set<Book> book=new HashSet<>();
     String Email;
     String Password;
 
@@ -42,11 +44,11 @@ public class Student {
         IsLibraryMember = libraryMember;
     }
 
-    public List<Book> getBook() {
+    public Set<Book> getBook() {
         return book;
     }
 
-    public void setBook(List<Book> book) {
+    public void setBook(Set<Book> book) {
         this.book = book;
     }
 
