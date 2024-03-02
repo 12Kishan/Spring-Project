@@ -13,6 +13,8 @@ export default function AddStudent() {
 
   const { email, password } = Student;
   const [showPassword, setShowPassword] = useState(false);
+
+  
   const navigate = useNavigate();
   const handleInputChange = (e) => {
     setStudent({
@@ -36,12 +38,12 @@ export default function AddStudent() {
       if (res.data.admin == true) {
         localStorage.setItem(res.data);
         toast.success("Admin Login");
-        navigate("/AdminHome");
+        navigate("/dashboard");
   
       } else {
         localStorage.setItem(res.data);
         toast.success("user Login");
-        navigate("/ShowTrain")
+        navigate("/dashboard")
      
       }
     }

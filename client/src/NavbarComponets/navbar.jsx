@@ -2,9 +2,9 @@
 import { Link } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-export default function Navbar({role}) {
+export default function Navbar() {
 
-  const data = localStorage.getItem;
+  const data = localStorage.getItem("isAdmin");
 
 
   return (
@@ -12,7 +12,7 @@ export default function Navbar({role}) {
       <div className="flex justify-between items-center p-3 bg-blue-500 text-black">
         <h1 className="text-3xl font-bold">Railway Ticket Booking</h1>
         <div className="flex justify-between space-x-10 text-xl">
-          {role == true && (
+          {data.isAdmin == true && (
             <>
               <Link to="/Addtrain" className="p-4">
                 Add Train
@@ -20,9 +20,12 @@ export default function Navbar({role}) {
               <Link to="/ShowTrain" className="p-4">
                 View Trains
               </Link>
+              <link to="/customerbooking" className="p-3">
+                Show Booking
+              </link>
             </>
           )}
-          {role == true && (
+          {data.isAdmin == false && (
             <>
               <Link to="/BookTicket" className="p-4">
                 Book Ticket
@@ -33,12 +36,9 @@ export default function Navbar({role}) {
             </>
           )}
           
-          <Link to="/about" className="p-4">
-            About Us
+           <Link to="/home" className="p-4">
+            Sign Out
           </Link>
-          {data.admin == null && (<><Link to="/login" className="p-4">
-            Login/Register
-          </Link></>)}
           
         </div>
       </div>

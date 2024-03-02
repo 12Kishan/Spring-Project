@@ -6,15 +6,15 @@ import Login from "./Components/Login";
 import './index.css';
  import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./Components/Register";
-import Navbar from "./Components/navbar";
+import Navbar from "./NavbarComponets/LandingPageNavbar";
 import AboutMe from "./Components/Aboutas";
-
+import Dashboard from "./Components/Dashboard";
 
 function App() {
   return (
     <>
      
-        <Navbar role={true}/>
+        <Navbar/>
         <Routes>
           <Route path="/ShowTrain" element={<ShowTrain/>} />
           <Route path="/AddTrain" element={<AddTrain/>} />
@@ -22,6 +22,7 @@ function App() {
           <Route path="/register" element={<Register/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/about" element={<AboutMe/>}/>
+          <Route path="/dashboard" element={<Dashboard/>}/>
         </Routes>
     
     </>
