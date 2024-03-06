@@ -5,20 +5,20 @@ import { toast } from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-export default function AddStudent() {
-  const [Student, setStudent] = useState({
+export default function AddUser() {
+  const [User, setUser] = useState({
     email: "",
     password: "",
   });
 
-  const { email, password } = Student;
+  const { email, password } = User;
   const [showPassword, setShowPassword] = useState(false);
 
   
   const navigate = useNavigate();
   const handleInputChange = (e) => {
-    setStudent({
-      ...Student,
+    setUser({
+      ...User,
       [e.target.name]: e.target.value,
     });
   };
@@ -27,7 +27,7 @@ export default function AddStudent() {
     setShowPassword(!showPassword); // Toggles the state for password visibility
   };
 
-  const saveStudent = async (e) => {
+  const saveUser = async (e) => {
     e.preventDefault();
     try{
     const res = await axios.get(`http://localhost:8080/api/user/validate/${email}/${password}`);
@@ -36,16 +36,18 @@ export default function AddStudent() {
     {
 
       if (res.data.admin == true) {
-        localStorage.setItem(res.data);
+        
         toast.success("Admin Login");
-        navigate("/dashboard");
-  
       } else {
-        localStorage.setItem(res.data);
         toast.success("user Login");
-        navigate("/dashboard")
-     
       }
+      localStorage.setItem("userId",res.data.userId);
+      localStorage.setItem("email",res.data.email);
+      localStorage.setItem("name",res.data.userName);
+      localStorage.setItem("isadmin",res.data.admin);
+
+      console.log(localStorage.getItem("user"))
+        navigate("/dashboard")
     }
    
   
@@ -59,7 +61,7 @@ export default function AddStudent() {
     <>
       <div className="container mx-auto p-10 m-10">
         <h2 className="text-3xl font-bold mb-5">Login</h2>
-        <form onSubmit={(e) => saveStudent(e)}>
+        <form onSubmit={(e) => saveUser(e)}>
           <div className="mb-5 relative">
             <label htmlFor="email" className="block text-lg font-semibold mb-2">
               Email

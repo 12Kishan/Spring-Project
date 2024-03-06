@@ -73,31 +73,15 @@ public class UserServices {
             List<Ticket> booktickettrain = null;
             Ticket ticket = new Ticket();
 
-                if ((train.getTotalSeats() - train.getTotalbookedSeats()) == 0) {
+                if ((train.getTotalSeats() - train.getTotalBookedSeats()) <= 0) {
                     ticket.setStatus("WAITING");
 
                 } else {
-                    ticket.setStatus("BOOKED");
+                    ticket.setStatus("CONFORMED");
                 }
-//                Ticket t1=ticketRepository.save(ticket);
-//            System.out.println("this is before ticket");
-//            System.out.println(t1);
-//
-//                bookticketuser = train.getTrainTicket();
-//                bookticketuser.add(t1);
-//            System.out.println("this is after book user ticket");
-//            System.out.println(bookticketuser);
-//                user.setTicketUser(bookticketuser);
-//                userRepository.save(user);
-//            System.out.println(user);
-//                booktickettrain = train.getTrainTicket();
-//                booktickettrain.add(t1);
-//
-//                train.setTrainTicket(booktickettrain);
-//                train.setTotalbookedSeats(train.getTotalbookedSeats() + 1);
-//                trainRepository.save(train);
 
-            ticketServices.createTicket((userId),trainid);
+            ticketServices.createTicket((userId),trainid,ticket);
+
 
             return true;
         }

@@ -13,7 +13,7 @@ import java.util.List;
 public class Train {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     int trainId;
 
     String trainName;
@@ -22,7 +22,7 @@ public class Train {
     String toLocation;
     int totalSeats;
     int totalBookedSeats=0;
-
+    int ticketamount=0;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
@@ -35,6 +35,14 @@ public class Train {
     @DateTimeFormat(pattern = "HH:mm")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     Date trainTime;
+
+    public int getTicketamount() {
+        return ticketamount;
+    }
+
+    public void setTicketamount(int ticketamount) {
+        this.ticketamount = ticketamount;
+    }
 
     public int getTotalSeats() {
         return totalSeats;
@@ -100,11 +108,11 @@ public class Train {
         this.trainTime = trainTime;
     }
 
-    public int getTotalbookedSeats() {
+    public int getTotalBookedSeats() {
         return totalBookedSeats;
     }
 
-    public void setTotalbookedSeats(int totalbookedSeats) {
+    public void setTotalBookedSeats(int totalbookedSeats) {
         this.totalBookedSeats = totalbookedSeats;
     }
 

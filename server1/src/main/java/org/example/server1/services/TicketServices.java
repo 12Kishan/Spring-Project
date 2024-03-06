@@ -34,6 +34,10 @@ public class TicketServices {
         return ticketRepository.findAll();
     }
 
+//    public Ticket findbyuser(User user){
+//        return ticketRepository.findByUser(user);
+//    }
+
     public boolean delete(long Id)
     {
 
@@ -43,17 +47,17 @@ public class TicketServices {
         return true;
     }
 
-    public void createTicket(Long userId, Long trainId) {
+    public void createTicket(Long userId, Long trainId,Ticket ticket) {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
         Train train = trainRepository.findById(trainId).orElseThrow(() -> new EntityNotFoundException("Train not found"));
 
-        Ticket ticket = new Ticket();
+
         ticket.setUser(user);
         ticket.setTrain(train);
 
         user.getTicketUser().add(ticket);
         train.getTrainTicket().add(ticket);
-        train.setTotalbookedSeats(train.getTotalbookedSeats() + 1);
+        train.setTotalBookedSeats(train.getTotalBookedSeats() + 1);
         ticketRepository.save(ticket);
     }
 

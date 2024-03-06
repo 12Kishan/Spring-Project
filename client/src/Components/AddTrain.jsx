@@ -10,7 +10,7 @@ export default function AddTrain() {
         trainNumber: "",
         fromLocation: "",
         toLocation:"",
-        
+        ticketamount:0,
         trainDate:"",
         trainTime:"",
         totalSeats:0,
@@ -22,6 +22,7 @@ export default function AddTrain() {
     fromLocation,
     toLocation,
     trainDate,
+    ticketamount,
     trainTime,totalSeats } = Train;
 
     const handleInputChange = (e) => {
@@ -32,7 +33,7 @@ export default function AddTrain() {
     };
 
     async function saveTrain  (e) {
-        
+        try{
         e.preventDefault();
         const Response =await axios.post("http://localhost:8080/api/train", Train);
         if(Response.status == 201)
@@ -44,8 +45,12 @@ export default function AddTrain() {
             toast.error("Somthing Went wrong!");
         }
     }
+    catch(err)
+    {
+        toast.error("somthing went wrong");
+    }
+    }
 
-    // console.log(Train);
     return (
         <>
         <div className="container mx-auto p-10">
@@ -111,6 +116,19 @@ export default function AddTrain() {
                         required
                         value={totalSeats}
                         onChange={(e) => setTrain({ ...Train, totalSeats: e.target.value })}
+                        
+                    />
+                </div>
+                <div className="mb-5">
+                    <label htmlFor="ticketamount" className="block text-lg font-semibold mb-2">Ticket Price</label>
+                    <input
+                        type="number"
+                        name="ticketamount"
+                        id="ticketamount"
+                        className="border border-gray-300 px-4 py-2 rounded-md w-full"
+                        required
+                        value={ticketamount}
+                        onChange={(e) => setTrain({ ...Train, ticketamount: e.target.value })}
                         
                     />
                 </div>

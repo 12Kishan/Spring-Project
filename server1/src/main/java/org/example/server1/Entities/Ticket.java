@@ -7,7 +7,7 @@ import java.util.Random;
 
 
 @Entity
-public class Ticket{
+public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Ticket{
             .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
             .toString();
 
-    String Status="Available";
+    String Status;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private User user;
 

@@ -9,6 +9,9 @@ import Register from "./Components/Register";
 import Navbar from "./NavbarComponets/LandingPageNavbar";
 import AboutMe from "./Components/Aboutas";
 import Dashboard from "./Components/Dashboard";
+import UserBooking from "./Components/CustomerBooking";
+import BookTicket from "./Components/BookTicket";
+import UserselfBooking from "./Components/UserBookings";
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
           <Route path="/login" element={<Login/>} />
           <Route path="/about" element={<AboutMe/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/booking" element={<UserBooking/>}/>
+          <Route path="/BookTicket" element={<BookTicket/>}/>
+          <Route path="//MyBookings" element={<UserselfBooking/>}/>
         </Routes>
     
     </>

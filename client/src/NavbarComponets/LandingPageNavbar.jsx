@@ -1,11 +1,9 @@
-
 import { Link } from "react-router-dom";
 import Navbar1 from "./navbar"
-// eslint-disable-next-line react/prop-types
+
 export default function Navbar() {
 
-  const data = localStorage.getItem("name");
-
+  const data = localStorage.getItem("userId");
 
   return (
     <>

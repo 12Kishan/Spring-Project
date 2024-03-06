@@ -54,17 +54,4 @@ public class TrainController {
         }
     }
 
-
-    @PostMapping("/ticket/{noOfTickets}")
-    public ResponseEntity<?> addticket(@RequestBody Ticket ticket)
-    {
-//        for(int i=0;i<number;i++)
-//        {
-           Ticket newticket= ticketServices.save(ticket);
-//        }
-        return new ResponseEntity<>("ticket created", HttpStatus.CREATED);
-    }
-
-
-
 }
