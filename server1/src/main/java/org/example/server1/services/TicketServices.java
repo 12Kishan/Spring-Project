@@ -10,6 +10,9 @@ import org.example.server1.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
+
 @Service
 public class TicketServices {
 
@@ -60,5 +63,24 @@ public class TicketServices {
         train.setTotalBookedSeats(train.getTotalBookedSeats() + 1);
         ticketRepository.save(ticket);
     }
+
+
+    public boolean updatetickets(Train train)
+    {
+        List<Ticket> waitingTickets = ticketRepository.findByTrainAndStatus(train, "WAITING");
+
+        System.out.print("this is problem"+waitingTickets+"another");
+
+        for (Ticket waitingTicket : waitingTickets )
+        {
+            System.out.print("this changed ticket" + waitingTicket);
+            waitingTicket.setStatus("CONFORMED");
+            ticketRepository.save(waitingTicket);
+            return true;
+        }
+        return false;
+    }
+
+
 
 }

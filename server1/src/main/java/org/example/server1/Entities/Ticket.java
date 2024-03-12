@@ -24,12 +24,20 @@ public class Ticket {
             .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
             .toString();
 
-    String Status;
+    String status;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private User user;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Train train;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public User getUser() {
         return user;
@@ -63,11 +71,5 @@ public class Ticket {
         this.ticketNo = ticketNo;
     }
 
-    public String getStatus() {
-        return Status;
-    }
 
-    public void setStatus(String status) {
-        Status = status;
-    }
 }

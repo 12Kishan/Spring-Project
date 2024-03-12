@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Navbar from '../Components/Navbar';
 
 export default function AddUser() {
   const [User, setUser] = useState({
@@ -47,7 +48,7 @@ export default function AddUser() {
       localStorage.setItem("isadmin",res.data.admin);
 
       console.log(localStorage.getItem("user"))
-        navigate("/dashboard")
+        navigate("/home")
     }
    
   
@@ -59,10 +60,11 @@ export default function AddUser() {
 
   return (
     <>
-      <div className="container mx-auto p-10 m-10">
+    <Navbar/>
+      <div className=" p-10 m-10 shadow-xl mx-96">
         <h2 className="text-3xl font-bold mb-5">Login</h2>
         <form onSubmit={(e) => saveUser(e)}>
-          <div className="mb-5 relative">
+          <div className="mb-5">
             <label htmlFor="email" className="block text-lg font-semibold mb-2">
               Email
             </label>
@@ -76,13 +78,14 @@ export default function AddUser() {
               onChange={(e) => handleInputChange(e)}
             />
           </div>
-          <div className="mb-5 relative">
+          <div className="mb-5">
             <label
               htmlFor="password"
               className="block text-lg font-semibold mb-2"
             >
               Password
             </label>
+            <div className="flex">
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -95,10 +98,11 @@ export default function AddUser() {
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute top-1/2 right-4 transform -translate-y-1/2 mt-4 text-gray-500 focus:outline-none"
+              className="ml-2"
             >
               {showPassword ? "Hide" : "Show"}
             </button>
+            </div>
           </div>
 
           <div className="flex space-x-4">
@@ -106,7 +110,7 @@ export default function AddUser() {
               type="submit"
               className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-md"
             >
-              Save
+              Login
             </button>
             <Link
               to={"/register"}

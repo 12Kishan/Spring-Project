@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import Navbar from '../Navbar';
+import { toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 export default function EditBook() {
   const { id } = useParams();
@@ -45,11 +48,24 @@ export default function EditBook() {
     e.preventDefault();
     await axios.post(`http://localhost:8080/api/train`, Train);
     console.log("train updated");
+    toast.success("Train updated successfully");
+    setTrain(
+     { trainName: "",
+      trainNumber: "",
+      fromLocation: "",
+      toLocation:"",
+      
+      trainDate:"",
+      trainTime:"",
+      totalSeats:0,
+    });
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="container mx-auto p-8">
-      <h2 className="text-3xl mb-8">Edit Book</h2>
+      <h2 className="text-3xl mb-8">Edit Train</h2>
       <form onSubmit={updateBook}>
       <div className="mb-5">
                     <label htmlFor="trainName" className="block text-lg font-semibold mb-2">Train Name</label>
@@ -158,5 +174,7 @@ export default function EditBook() {
         </div>
       </form>
     </div>
+    <Toaster/>
+    </>
   );
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
+import Navbar from '../Navbar';
 
 export default function CustomerBooking() {
 
@@ -26,7 +27,7 @@ export default function CustomerBooking() {
 
 
     <>
-      
+      <Navbar/>
       <div className="container mx-auto p-8">
         <h1 className="text-3xl font-semibold mb-8">Booking</h1>
         <table className="w-full table-auto border-collapse shadow bg-white">

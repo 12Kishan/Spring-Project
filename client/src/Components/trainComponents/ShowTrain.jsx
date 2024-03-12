@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
+import Navbar from '../Navbar';
 
 export default function ShowTrain() {
   const [trains, setTrains] = useState([]);
@@ -29,16 +30,30 @@ export default function ShowTrain() {
       if (error.response && error.response.status === 400) {
         toast.error(error.response.data);
       } else {
-        toast.error("Delete Failed: All trains have not been returned by the student");
+        toast.error("Delete Failed: All trains have not been deleted Because of booked tickets");
       }
     }
   };
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const filteredTrains = trains.filter((train) => {
+    const { trainName, trainNumber, fromLocation, toLocation } = train;
+    const searchString = trainName + trainNumber + fromLocation + toLocation;
+    return searchString.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
   return (
     <>
-      
+      <Navbar/>
       <div className="container mx-auto p-8">
         <h1 className="text-3xl font-semibold mb-8">Manage Trains</h1>
+        <input
+          type="text"
+          placeholder="Search trains..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border border-gray-400 px-4 py-2 mb-4"
+        />
         <table className="w-full table-auto border-collapse shadow bg-white">
           <thead>
             <tr className="bg-gray-200">
@@ -52,7 +67,9 @@ export default function ShowTrain() {
             </tr>
           </thead>
           <tbody className="text-center">
-            {trains.map((train, index) => (
+          {filteredTrains == "" ? <><div>No data Found</div></>:<>
+
+            {filteredTrains.map((train, index) => (
               <tr key={train.trainId} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
                 <td className="border border-gray-400 px-4 py-2">{index + 1}</td>
                 <td className="border border-gray-400 px-4 py-2">{train.trainName}</td>
@@ -64,7 +81,7 @@ export default function ShowTrain() {
                   <Link
                     to={`/Edittrain/${train.trainId}`}
                     className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2"
-                  >
+                    >
                     Edit
                   </Link>
                   </td>
@@ -72,12 +89,13 @@ export default function ShowTrain() {
                   <button
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => handleDelete(train.trainId)}
-                  >
+                    >
                     Delete
                   </button>
                 </td>
               </tr>
             ))}
+            </>}
           </tbody>
         </table>
         <Link

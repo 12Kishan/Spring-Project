@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
+import Navbar from '../Components/Navbar';
 
 export default function AddUser() {
 
@@ -45,7 +46,8 @@ export default function AddUser() {
 
   return (
     <>
-    <div className="container mx-auto p-10">
+    <Navbar/>
+    <div className="p-10 mx-96 shadow-xl">
             <h2 className="text-3xl font-bold mb-5">Register</h2>
             <form onSubmit={(e) => saveUser(e)}>
                 <div className="mb-5 relative">

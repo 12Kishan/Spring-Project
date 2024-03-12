@@ -1,16 +1,21 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
+import { ReactSession } from 'react-client-session';
+import Navbar from './Navbar';
+import { useNavigate } from "react-router-dom";
+
 
 export default function BookTicket() {
   const [show, setshow] = useState(false);
   const [selectedtrain, setselectedtrain] = useState(null);
   const [trains, setTrains] = useState([]);
   const [totalamount ,settotalamount] = useState(0);
-
+  ReactSession.setStoreType("sessionStorage");
   useEffect(() => {
     loadtrains();
   }, []);
+  const navigate = useNavigate();
 
   const loadtrains = async () => {
     try {
@@ -21,16 +26,23 @@ export default function BookTicket() {
     }
   };
 
-  const handlebooking = (trainId) => {
+  const handlebooking = async (trainId) => {
+    if(localStorage.getItem("userId") == null)
+    {
+      await toast.error("you need to login to book ticket");
+      
+      navigate("/login")
+    }
     setshow(true);
     const train = trains.find(train => train.trainId === trainId);
     setselectedtrain(train);
-    console.log(selectedtrain);
+    loadtrains();
+
   };
 
   const handlecancle= () => {
     setshow(false);
-    console.log(show);
+  
   };
 
 
@@ -40,50 +52,84 @@ export default function BookTicket() {
     settotalamount(price);
   }
 
- const handlesave =async (totalamount) => {
+  const handlesave = async (totalamount) => {
 
-  const noOfTickets = totalamount / selectedtrain.ticketamount;
-  alert("are you conform to book "+noOfTickets+" tickets with price of " + totalamount)
-  const data = localStorage.getItem("userId");
-
-  let flag = true;
-
-  try{
-
-    for(let i=0;i<noOfTickets;i++)
+    if(totalamount == 0)
     {
-    const responce = await axios.post(`http://localhost:8080/api/user/book/${data}/${selectedtrain.trainId}/book`)
-    if(responce.status == 201)
-    flag = false;
+      toast.error("you need to book minumun one ticket")
     }
-
-    if(flag)
+    else
     {
-      toast.error("all tickets are not booked")
-    }
-    else{
-      toast.success("Ticket Booked successfully")
-      setshow(false);
-      settotalamount(0);
+    const noOfTickets = totalamount / selectedtrain.ticketamount;
+    const data = localStorage.getItem("userId");
 
+    // Display a confirmation dialog
+    const confirmBooking = confirm("Are you sure you want to book " + noOfTickets + " tickets with a total price of " + totalamount + "?");
+
+    // If user clicks OK
+    if (confirmBooking) {
+        try {
+            let flag = true;
+            for (let i = 0; i < noOfTickets; i++) {
+                const response = await axios.post(`http://localhost:8080/api/user/book/${data}/${selectedtrain.trainId}/book`);
+                if (response.status !== 201) {
+                    flag = false;
+                }
+            }
+            if (flag) {
+                toast.success("Tickets booked successfully");
+                setshow(false);
+                settotalamount(0);
+            } else {
+                toast.error("Not all tickets were booked");
+            }
+        } catch (err) {
+            console.log("Error:", err);
+            toast.error("Something went wrong. Please try again later.");
+        }
+    } else {
+        // If user clicks Cancel
+        toast.info("Booking cancelled");
     }
   }
-  catch(err)
-  {
-    console.log("this error",err);
-    toast.error("some this went wrong so check you status and accordingly try again")
-  }
+};
 
 
+const formatDate = (dateString) => {
+  // Create a new Date object from the input date string
+  const date = new Date(dateString);
 
- };
+  // Extract day, month, and year from the date object
+  const day = date.getDate().toString().padStart(2, '0'); // Pad single-digit days with leading zero
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+  const year = date.getFullYear();
+
+  // Construct the formatted date string in the desired format
+  return `${day}-${month}-${year}`;
+}
+
+const [searchTerm, setSearchTerm] = useState("");
+  const filteredTrains = trains.filter((train) => {
+    const { trainName, trainNumber, fromLocation, toLocation } = train;
+    const searchString = trainName + trainNumber + fromLocation + toLocation;
+    return searchString.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
 
   return (
     <>
+    <Navbar/>
       {!show ? (
         <>
           <div className="container mx-auto p-8">
-            <h1 className="text-3xl font-semibold mb-8">Manage Trains</h1>
+            <h1 className="text-3xl font-semibold mb-8">Book Ticket</h1>
+            <input
+          type="text"
+          placeholder="Search trains..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border border-gray-400 px-4 py-2 mb-4"
+        />
             <table className="w-full table-auto border-collapse shadow bg-white">
               <thead>
                 <tr className="bg-gray-200">
@@ -96,6 +142,8 @@ export default function BookTicket() {
                   </th>
                   <th className="border border-gray-400 px-4 py-2">From</th>
                   <th className="border border-gray-400 px-4 py-2">To</th>
+                  <th className="border border-gray-400 px-4 py-2">Date</th>
+                  <th className="border border-gray-400 px-4 py-2">Time</th>
                   <th className="border border-gray-400 px-4 py-2">
                     Available tickets
                   </th>
@@ -103,11 +151,16 @@ export default function BookTicket() {
                 </tr>
               </thead>
               <tbody className="text-center">
-                {trains.map((train, index) => (
+
+              {filteredTrains == "" ? <><div>No data Found</div></>:<>
+              
+
+
+                {filteredTrains.map((train, index) => (
                   <tr
                     key={train.trainId}
                     className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
-                  >
+                    >
                     <td className="border border-gray-400 px-4 py-2">
                       {index + 1}
                     </td>
@@ -124,18 +177,25 @@ export default function BookTicket() {
                       {train.toLocation}
                     </td>
                     <td className="border border-gray-400 px-4 py-2">
+                      {formatDate(train.trainDate)}
+                    </td>
+                    <td className="border border-gray-400 px-4 py-2">
+                      {train.trainTime}
+                    </td>
+                    <td className="border border-gray-400 px-4 py-2">
                       {(train.totalSeats - train.totalBookedSeats)>0 ? (train.totalSeats - train.totalBookedSeats):0}
                     </td>
                     <td className="border border-gray-400 px-4 py-2">
                       <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={()=>{handlebooking(train.trainId)}}
-                      >
+                        >
                         Book Ticket
                       </button>
                     </td>
                   </tr>
                 ))}
+                </>}
               </tbody>
             </table>
           </div>
@@ -154,7 +214,7 @@ export default function BookTicket() {
                 <label className="block text-sm font-semibold mb-1">
                   Username:
                 </label>
-                <span className="text-sm">John Doe</span>
+                <span className="text-sm">{localStorage.getItem("name")}</span>
               </div>
               
               <div className="flex justify-between">
@@ -177,14 +237,14 @@ export default function BookTicket() {
               <div className="flex justify-between">
               <div className="mb-4">
                 <label className="block text-sm font-semibold mb-1">
-                  Date :
+                  Train Date :
                 </label>
                 <span className="text-sm">{selectedtrain.trainDate}</span>
               </div>
 
               <div className="mb-4">
                 <label className="block text-sm font-semibold mb-1">
-                  Time :
+                  Train Time :
                 </label>
                 <span className="text-sm">{selectedtrain.trainTime}</span>
               </div>

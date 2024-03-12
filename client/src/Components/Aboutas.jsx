@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Navbar from '../Components/Navbar';
 
 const AboutMe = () => {
   const details = {
@@ -9,6 +10,8 @@ const AboutMe = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="bg-white rounded-lg shadow-md p-8 mt-5 max-w-3xl w-full mx-auto">
       <div className=" lg:flex md:flex sm:flex-none justify-center mb-6 ">
         <img
@@ -74,6 +77,7 @@ const AboutMe = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

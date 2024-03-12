@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
+import Navbar from '../Navbar';
 
 export default function AddTrain() {
     const [Train, setTrain] = useState({
@@ -39,7 +40,15 @@ export default function AddTrain() {
         if(Response.status == 201)
         {
             toast.success("Train Added SucessFully");
-
+            setTrain({trainName: "",
+            trainNumber: "",
+            fromLocation: "",
+            toLocation:"",
+            ticketamount:0,
+            trainDate:"",
+            trainTime:"",
+            totalSeats:0,
+            totalBookedSeats:0});
         }
         else{
             toast.error("Somthing Went wrong!");
@@ -53,8 +62,9 @@ export default function AddTrain() {
 
     return (
         <>
-        <div className="container mx-auto p-10">
-            <h2 className="text-3xl font-bold mb-5">Add Train</h2>
+        <Navbar/>
+        <div className="container p-10 mx-20">
+            <h2 className="text-3xl font-bold mb-5"></h2>
             <form onSubmit={saveTrain}>
                 <div className="mb-5">
                     <label htmlFor="trainName" className="block text-lg font-semibold mb-2">Train Name</label>
